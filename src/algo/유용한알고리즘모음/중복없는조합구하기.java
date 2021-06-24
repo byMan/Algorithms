@@ -37,6 +37,7 @@ public class 중복없는조합구하기 {
         //원소 개수가 4이면
         if(idx == N){
             tc++;
+//            System.out.println("총 갯수 : " + tc);
             System.out.println(Arrays.toString(numbers));
             return;
         }
