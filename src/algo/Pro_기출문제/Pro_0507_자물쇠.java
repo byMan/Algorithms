@@ -51,13 +51,13 @@ public class Pro_0507_자물쇠 {
 
                     //0번인덱스에서 맨 아래 인덱스로 가는 경우 더 짧은 거리인지 체크
                     int v = 1;
-                    for (int j = row-1; j >= 0; j--) {
+                    for (int j = row-1; j >= rowIdx; j--) {
                         sum[j][i] = Math.min(sum[j][i], rowIdx + v++);
                     }
 
                     //맨 아래 인덱스에서 0번째 인덱스 방향으로 회전하는 경우
                     v = row;
-                    for(int j=0; j<row; j++){
+                    for(int j=0; j<=rowIdx; j++){
                         sum[j][i] = Math.min(sum[j][i], v - rowIdx);
                     }
                 }
@@ -145,5 +145,4 @@ N * K 는 최대 1,000,000 임을 보장한다.
 #2 6
 #3 5
 #4 2
-#5 3
  */
