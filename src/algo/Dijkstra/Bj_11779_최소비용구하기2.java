@@ -26,7 +26,6 @@ public class Bj_11779_최소비용구하기2 {
     static long[] dist;
     static List<Node>[] list;
     static List<Integer> routes = new ArrayList<>();
-    static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
