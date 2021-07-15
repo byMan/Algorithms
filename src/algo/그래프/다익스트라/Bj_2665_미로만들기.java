@@ -1,4 +1,4 @@
-package algo.Dijkstra;
+package algo.그래프.다익스트라;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
