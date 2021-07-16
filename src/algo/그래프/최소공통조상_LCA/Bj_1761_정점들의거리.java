@@ -1,4 +1,4 @@
-package algo.LCA;
+package algo.그래프.최소공통조상_LCA;
 
 import java.awt.*;
 import java.io.BufferedReader;
