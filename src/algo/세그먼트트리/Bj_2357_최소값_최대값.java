@@ -19,8 +19,8 @@ public class Bj_2357_최소값_최대값 {
         M = Integer.parseInt(st.nextToken());
 
         map = new int[N+1];
-        minTree = new int[(int)Math.pow(2, Math.ceil(Math.log(N) / Math.log(2)) + 2)];
-        maxTree = new int[(int)Math.pow(2, Math.ceil(Math.log(N) / Math.log(2)) + 2)];
+        minTree = new int[N*4];
+        maxTree = new int[N*4];
 
         for(int i=1; i<=N; i++){
             map[i] = Integer.parseInt(br.readLine());
@@ -34,7 +34,9 @@ public class Bj_2357_최소값_최대값 {
             st = new StringTokenizer(br.readLine());
             int ts = Integer.parseInt(st.nextToken());
             int te = Integer.parseInt(st.nextToken());
-            sb.append(getMin(1, N, ts, te, 1)).append(" ").append(getMax(1, N, ts, te, 1)).append("\n");
+            int min = getMin(1, N, ts, te, 1);
+            int max = getMax(1, N, ts, te, 1);
+            sb.append(min).append(" ").append(max).append("\n");
         }
 
         bw.write(sb.toString());
@@ -46,21 +48,23 @@ public class Bj_2357_최소값_최대값 {
 
     private static int minTree(int start, int end, int node){
         if(start == end){
-            minTree[node] = map[start];
-        }else{
-            int mid = (start + end) / 2;
-            minTree[node] = Math.min(minTree(start, mid, node*2), minTree(mid+1, end, node*2+1));
+            return minTree[node] = map[start];
         }
+        int mid = (start + end) / 2;
+        int left = minTree(start, mid, node*2);
+        int right = minTree(mid+1, end, node*2+1);
+        minTree[node] = left < right ? left : right;
         return minTree[node];
     }
 
     private static int maxTree(int start, int end, int node){
         if(start == end){
-            maxTree[node] = map[start];
-        }else{
-            int mid = (start + end ) / 2;
-            maxTree[node] = Math.max(maxTree(start, mid, node*2), maxTree(mid+1, end, node*2+1));
+            return maxTree[node] = map[start];
         }
+        int mid = (start + end ) / 2;
+        int left = maxTree(start, mid, node*2);
+        int right = maxTree(mid+1, end, node*2+1);
+        maxTree[node] = left > right ? left : right;
         return maxTree[node];
     }
 
@@ -72,7 +76,10 @@ public class Bj_2357_최소값_최대값 {
             return minTree[node];
         }
         int mid = (start + end) / 2;
-        return Math.min(getMin(start, mid, ts, te, node*2), getMin(mid+1, end, ts, te, node*2+1));
+        int left = getMin(start, mid, ts, te, node*2);
+        int right = getMin(mid+1, end, ts, te, node*2+1);
+        int min = left < right ? left : right;
+        return min;
     }
 
     private static int getMax(int start, int end, int ts, int te, int node){
@@ -83,6 +90,9 @@ public class Bj_2357_최소값_최대값 {
             return maxTree[node];
         }
         int mid = (start + end) / 2;
-        return Math.max(getMax(start, mid, ts, te, node*2), getMax(mid+1, end, ts, te, node*2+1));
+        int left = getMax(start, mid, ts, te, node*2);
+        int right = getMax(mid+1, end, ts, te, node*2+1);
+        int max = left > right ? left : right;
+        return max;
     }
 }
