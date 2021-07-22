@@ -88,6 +88,7 @@ public class 기본예제 {
         System.out.println(query(1, 0, 9, 3, 7));
         System.out.println(query(1, 0, 9, 0, 9));
 
+        //특정 위치인 인덱스 9번 위치의 값을 10으로 변경하여 계산한다.
         arr[9] = 10;
         update(1, 0, 9, 9, 10);
         System.out.println(query(1, 0, 9, 0, 9));
