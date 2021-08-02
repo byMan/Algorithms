@@ -1,4 +1,4 @@
-package algo.그래프.그래프_BFS;
+package algo.그래프.BFS;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

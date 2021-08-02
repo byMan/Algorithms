@@ -1,49 +1,75 @@
-import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Test2 {
+    static int N;
+    static int[] arr, tree;
 
-    private static long[][] memo;
-    private static int[] arr = { 4, 7, -2, -8, 3 }, arrCopy, temp;
-    private static int N, M;
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = null;
 
-    public static void main(String[] args) {
-        N = arr.length;
-        M = 4;              //N개중 M개 중복조합
+        N = Integer.parseInt(br.readLine());
 
-        arrCopy = new int[N];
-        temp = new int[M];
-        memo = new long[1001][1001];
-        comb(0, 0);
+        int[] a = new int[N];
+        st = new StringTokenizer(br.readLine());
+        for(int i=0; i<N; i++){
+            a[i] = Integer.parseInt(st.nextToken());
+        }
+
+        int[] b = new int[N];
+        st = new StringTokenizer(br.readLine());
+        for(int i=0; i<N; i++){
+            b[i] = Integer.parseInt(st.nextToken());
+        }
+
+        int index[] = new int[1000001];
+        for(int i=0; i<N; i++){
+            index[b[i]] = i;
+        }
+
+        long ans = 0;
+        tree = new int[N*5];
+
+        for(int i=0; i<N; i++){
+            ans += query(1, 0, N-1, index[a[i]], N-1);
+            update(1, 0, N-1, index[a[i]], 1);
+        }
+
+        System.out.println(ans);
     }
 
-    private static void comb(int index, int depth) {
 
-        if (depth == 4) {
-            System.out.println(Arrays.toString(temp));
+    private static long query(int node, int start, int end, int ts, int te){
+        if(start > te || end < ts){
+            return 0;
+        }
+
+        if(start >= ts && end <= te){
+            return tree[node];
+        }
+
+        int mid = (start + end) / 2;
+        long left = query(node*2, start, mid, ts, te);
+        long right = query(node*2+1, mid+1, end, ts, te);
+        return left + right;
+    }
+
+
+    private static void update(int node, int start, int end, int index, int val){
+        if(start > index || end < index){
             return;
         }
 
-        if (index == arr.length) {
+        if(start == end){
+            tree[node] = val;
             return;
         }
 
-        temp[depth] = arr[index];
-        // index를 안늘려주면 다음 depth에서도 계속 같은 index 가르킨다
-        comb(index, depth + 1);
-        // 대신 출력된 이후에는 값이 바껴야 되므로 index 추가
-        comb(index + 1, depth);
-    }
-
-
-    private static long memoization(int n, int r){
-        if(memo[n][r] > 0){
-            return memo[n][r];
-        }
-
-        if(r == 0 || n == r){
-            return memo[n][r] = 1;
-        }
-
-        return memo[n][r] = memoization(n-1, r-1) + memoization(n-1, r);
+        int mid = (start + end) / 2;
+        update(node * 2, start, mid, index, val);
+        update(node * 2 + 1, mid+1, end, index, val);
+        tree[node] = tree[node*2] + tree[node*2+1];
     }
 }
