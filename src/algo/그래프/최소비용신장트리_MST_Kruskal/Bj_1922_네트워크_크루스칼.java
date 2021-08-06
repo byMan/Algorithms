@@ -12,39 +12,57 @@ import java.util.StringTokenizer;
  * 프림 -> 노드를 하나 하나 방문하여 해당 노드에 연결된 간선 중 가장 비용이 적은 간선을 선택하는 구조로 간선이 많은 경우 사용하기 적합하다.
  */
 public class Bj_1922_네트워크_크루스칼 {
-    static int n, m, ans;
+    static int N, M, ANS;
     static int[] parent;
-    static PriorityQueue<Node1922k> q = new PriorityQueue<Node1922k>();
+    static PriorityQueue<Node> q = new PriorityQueue<>();
+
+    static class Node implements Comparable<Node>{
+        int com1, com2, cost;
+        Node(int a, int b, int c){
+            com1 = a; com2 = b; cost = c;
+        }
+
+        @Override
+        public int compareTo(Node o) {
+            return this.cost - o.cost;
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
+        StringTokenizer st = null;
 
-        n = Integer.parseInt(br.readLine());
-        m = Integer.parseInt(br.readLine());
+        N = Integer.parseInt(br.readLine());
+        M = Integer.parseInt(br.readLine());
 
-        parent = new int[n+1];
-        for(int i=1; i<=n; i++){
+        parent = new int[N+1];
+        for(int i=1; i<=N; i++){
             parent[i] = i;
         }
 
-        for(int i=0; i<m; i++) {
+        for(int i=0; i<M; i++){
             st = new StringTokenizer(br.readLine());
-            int s = Integer.parseInt(st.nextToken());
-            int e = Integer.parseInt(st.nextToken());
-            int v = Integer.parseInt(st.nextToken());
-            q.add(new Node1922k(s, e, v));
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            int c = Integer.parseInt(st.nextToken());
+            q.add(new Node(a, b, c));
         }
 
-        while (!q.isEmpty()) {
-            Node1922k node = q.poll();
-            int a = find(node.s);
-            int b = find(node.e);
+        bfs();
+
+        System.out.println(ANS);
+    }
+
+    private static void bfs(){
+
+        while(!q.isEmpty()){
+            Node now = q.poll();
+            int a = find(now.com1);
+            int b = find(now.com2);
             if(a==b) continue;
             union(a, b);
-            ans += node.v;
+            ANS += now.cost;
         }
-
-        System.out.println(ans);
     }
 
     private static int find(int a){
@@ -52,25 +70,11 @@ public class Bj_1922_네트워크_크루스칼 {
         return parent[a] = find(parent[a]);
     }
 
-    private static void union(int s, int e){
-        if(s < e){
-            parent[e] = s;
+    private static void union(int a, int b){
+        if(a<b){
+            parent[b] = a;
         }else{
-            parent[s] = e;
+            parent[a] = b;
         }
-    }
-}
-class Node1922k implements Comparable<Node1922k>{
-    int s;
-    int e;
-    int v;
-    public Node1922k(int s, int e, int v){
-        this.s = s;
-        this.e = e;
-        this.v = v;
-    }
-    @Override
-    public int compareTo(Node1922k o) {
-        return this.v - o.v;
     }
 }
