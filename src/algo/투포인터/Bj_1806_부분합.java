@@ -1,16 +1,19 @@
+package algo.투포인터;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Test {
-    static int N, M;
+public class Bj_1806_부분합 {
+    static int N, S;
     static int[] arr;
+
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
         N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
+        S = Integer.parseInt(st.nextToken());
 
         arr = new int[N];
 
@@ -19,36 +22,24 @@ public class Test {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        int ret = twoPoint1();
+        int ret = twoPointer();
 
         System.out.println(ret);
     }
 
-    private static int twoPoint() {
-        int cnt = 0, sum = 0, start = 0, end = 0;
+    private static int twoPointer() {
+        int start=0, end=0, sum=0, cnt=0, len=Integer.MAX_VALUE;
         while (true) {
-            if(sum >= M) {
+            if(sum >= S){
+                len = Math.min(len, end - start);
                 sum -= arr[start++];
-            }else if(end == N){
+            } else if (end == N) {
                 break;
             }else{
                 sum += arr[end++];
             }
-            if(sum == M) cnt++;
         }
-        return cnt;
-    }
 
-
-    private static int twoPoint1(){
-        int start=0, end=0, sum=0, cnt=0;
-        while(start < N){
-            while(sum < M && end < N){
-                sum += arr[end++];
-            }
-            if(sum == M) cnt++;
-            sum -= arr[start++];
-        }
-        return cnt;
+        return len == Integer.MAX_VALUE ? 0 : len;
     }
 }
