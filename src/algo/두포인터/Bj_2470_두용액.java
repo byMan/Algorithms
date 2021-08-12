@@ -1,4 +1,4 @@
-package algo.투포인터;
+package algo.두포인터;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
