@@ -58,6 +58,7 @@ public class Bj_5719_거의최단경로 {
 
             //우선 첫 번째 다익스트라를 통해 각각의 노드에 대해 최소 경로가 되는 직전 노드를 찾아서 parent[n]에 넣어준다.
             dijkstra(S, D);     // 첫번째 다익스트라
+            print("parent[]", parent);
 //            print("dist[]", dist);
 //            print("check[]", check);
 
@@ -154,6 +155,10 @@ public class Bj_5719_거의최단경로 {
             }
             System.out.println();
         }
+    }
+
+    private static void print(String name, List<Integer>[] parent) {
+        Arrays.stream(parent).forEach(o -> System.out.println("o = " + o));
     }
 }
 

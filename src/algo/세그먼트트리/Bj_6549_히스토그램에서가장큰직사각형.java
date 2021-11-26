@@ -3,6 +3,7 @@ package algo.세그먼트트리;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Bj_6549_히스토그램에서가장큰직사각형 {
@@ -28,8 +29,8 @@ public class Bj_6549_히스토그램에서가장큰직사각형 {
             }
 
             tree = new int[N * 4];
-            init(1, N, 1);
-
+            init(1, 1, N);
+            System.out.println(Arrays.toString(tree));
             sb.append(getMaxWidth(1, N)).append("\n");
         }
 
@@ -37,49 +38,59 @@ public class Bj_6549_히스토그램에서가장큰직사각형 {
         br.close();
     }
 
+
     // 세그먼트 트리의 각 노드엔 담당하는 구간의 최솟값을 가지는 인덱스를 저장한다.
-    private static int init(int start, int end, int node) {
+    private static int init(int node, int start, int end) {
         if (start == end) return tree[node] = start;
 
         int mid = (start + end) / 2;
-        int leftMinIndex = init(start, mid, node * 2);
-        int rightMinIndex = init(mid + 1, end, node * 2 + 1);
+        int leftMinIndex = init(node * 2, start, mid);
+        int rightMinIndex = init(node * 2 + 1, mid + 1, end);
 
         return tree[node] = arr[leftMinIndex] < arr[rightMinIndex] ? leftMinIndex : rightMinIndex;
     }
 
-    // i~j 구간에서 최솟값을 가지는 인덱스를 반환한다.
-    private static int query(int start, int end, int node, int i, int j) {
-        if (i > end || j < start) return INF;
 
-        if (i <= start && end <= j) return tree[node];
+    // start~end 구간에서 최솟값을 가지는 인덱스를 반환한다.
+    private static int query(int node, int start, int end, int ts, int te) {
+        if (ts > end || te < start) return INF;
+
+        if (ts <= start && end <= te) return tree[node];
 
         int mid = (start + end) / 2;
-        int leftMinIndex = query(start, mid, node * 2, i, j);
-        int rightMinIndex = query(mid + 1, end, node * 2 + 1, i, j);
+        int leftMinIndex = query(node * 2, start, mid, ts, te);
+        int rightMinIndex = query(node * 2 + 1, mid + 1, end, ts, te);
 
+        //최소값을 갖는 인덱스 정보를 저장시킨다.
         if (leftMinIndex == INF) return rightMinIndex;
         else if (rightMinIndex == INF) return leftMinIndex;
         else return arr[leftMinIndex] < arr[rightMinIndex] ? leftMinIndex : rightMinIndex;
     }
 
-    // i~j 구간에서의 최대 넓이를 찾는 메서드.
-    private static long getMaxWidth(int i, int j) {
+
+    // start~end 구간에서의 최대 넓이를 찾는 메서드.
+    private static long getMaxWidth(int start, int end) {
         long maxWidth, tmpWidth;
-        int minIndex = query(1, N, 1, i, j);
 
-        // 최소 높이를 바탕으로 넓이 계산.
-        maxWidth = (long) (j - i + 1) * (long) arr[minIndex];
+        //start와 end 구간내에서 최소값이 존재하는 인덱스값을 구한다.
+        int minIndex = query(1, 1, N, start, end);
 
-        // 왼쪽 존재 ?
-        if (i < minIndex) {
-            tmpWidth = getMaxWidth(i, minIndex - 1);
+        //start와 end 구간(길이) * 최소 높이를 바탕으로 넓이 계산.
+        maxWidth = (long) (end - start + 1) * arr[minIndex];
+
+        // start와 end 구간의 최소값이 존재하는 인덱스 왼쪽에 막대가 존재 ?
+        if (start < minIndex) {
+            //현재 구간 이외의 구간인 왼쪽 구간에 대한 최대 넓이 값도 구한다.
+            tmpWidth = getMaxWidth(start, minIndex - 1);
+            //두 값을 비교해서 최대값을 구한다.
             maxWidth = Math.max(maxWidth, tmpWidth);
         }
 
-        // 오른쪽 존재 ?
-        if (minIndex < j) {
-            tmpWidth = getMaxWidth(minIndex + 1, j);
+        // start와 end 구간의 최소값이 존재하는 인덱스 오른쪽에 막대가 존재 ?
+        if (minIndex < end) {
+            //현재 구간 이외의 구간인 오른쪽 구간에 대한 최대 넓이 값도 구한다.
+            tmpWidth = getMaxWidth(minIndex + 1, end);
+            //두 값을 비교해서 최대값을 구한다.
             maxWidth = Math.max(maxWidth, tmpWidth);
         }
 
