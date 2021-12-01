@@ -3,7 +3,6 @@ package algo.세그먼트트리;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Bj_6549_히스토그램에서가장큰직사각형 {
@@ -30,7 +29,7 @@ public class Bj_6549_히스토그램에서가장큰직사각형 {
 
             tree = new int[N * 4];
             init(1, 1, N);
-            System.out.println(Arrays.toString(tree));
+//            System.out.println(Arrays.toString(tree));
             sb.append(getMaxWidth(1, N)).append("\n");
         }
 
